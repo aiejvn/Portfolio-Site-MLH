@@ -13,6 +13,12 @@ button {
 a {
     font-family: "Roboto", serif;
     color: white;
+    text-decoration: none;
+}
+
+a.nav-item.nav-link {
+  padding-left: 60px;
+  padding-right: 60px;
 }
 
 body {
@@ -54,21 +60,23 @@ body {
 }
 
 .nav-content nav {
-    display: block;
+    display: block-flex;
     width: 100%;
-    text-align: right;
-    padding-top: 0px;
+    text-align: center;
     padding-right: 0px;
     margin: auto;
-    padding-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     background-color:#294c91;
+    font-size: 32px;
+    color:white;
 }
 
 .profile {
   background-color: #1d539f !important;
   text-align: center;
   height: 320px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 
 .profile h1 {
