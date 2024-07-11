@@ -28,11 +28,11 @@ class TimelinePost(Model):
 mydb.connect()
 mydb.create_tables([TimelinePost])
 
+
 # Example data for display
 work_experiences = []
 educations = []
 hobbies = []
-
 
 @app.route("/")
 def index():
@@ -110,3 +110,10 @@ def get_time_line_post():
             model_to_dict(p) for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
+    
+time_line_messages = get_time_line_post()['timeline_posts']
+
+@app.route('/timeline')
+def timeline():
+    time_line_messages = get_time_line_post()['timeline_posts']
+    return render_template('timeline.html', title="Timeline", time_line_messages=time_line_messages)
