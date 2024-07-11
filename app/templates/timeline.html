@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="Personal Portfolio">
+    <meta property="og:description" content="My Personal Portfolio">
+    <meta property="og:url" content="{{ url }}">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/">
+                <div class="nav-logo">
+                    <img src="./static/img/logo.svg" />
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <div class="profile">
+        <div id="profile-picture" class="profile-picture">
+            <img src="./static/img/myself.jpg">
+        </div>
+        <h1>Kevin Wang</h1>
+    </div>
+
+    <header class="nav-bar">
+        <div class="nav-content">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="/">About Me</a>
+                        <a class="nav-item nav-link" href="/work">Work and Education</a>
+                        <a class="nav-item nav-link" href="/hobbies">Hobbies</a>
+                        <a class="nav-item nav-link" href="/places">Cool Places I've
+                            Visited</a>
+                        <a class="nav-item nav-link" href="/timeline">Leave a Message</a>    
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <h2>Messages</h2>
+    {% for message in time_line_messages %}
+    <h3>
+        <img src="https://gravatar.com/avatar/?d=mp" class="pfp"/>
+        {{ message['name'] }} ({{ message['email'] }})
+    </h3>
+    <p> Sent at {{ message['created_at'] }}</p>
+    <p>Said: {{ message['content'] }}</p>
+    {% endfor %}
+
+    <form id="form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="email" placeholder="Email" required>
+        <textarea name="content" placeholder="Leave a message!" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+    
+    <script>
+        const form = document.getElementById('form');
+        form.addEventListener('submit', function(e){
+            e.preventDefault(); // prevent default submission behavior
+            const payload = new FormData(form); // Create payload as new FormData object
+            fetch('/api/timeline_post', { // Submits form to database
+                method: 'POST',
+                body: payload,
+            })
+            form.reset();
+        })
+    </script>
+
+</body>
+
+</html>
