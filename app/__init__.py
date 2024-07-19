@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, Response
+import json
 from dotenv import load_dotenv
 from peewee import *
 import datetime
@@ -96,24 +97,68 @@ def places():
 
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
-    name = request.form['name']
-    email = request.form['email']
-    content = request.form['content']
+    name = request.form.get('name')
+    email = request.form.get('email')
+    content = request.form.get('content')
+
+    # Validating the name, email and content
+    if not name:
+        return Response(
+            json.dumps({"error": "Invalid name"}),
+            status=400,
+            mimetype='application/json'
+        )
+    if not content:
+        return Response(
+            json.dumps({"error": "Invalid content"}),
+            status=400,
+            mimetype='application/json'
+        )
+    if not email or "@" not in email:
+        return Response(
+            json.dumps({"error": "Invalid email"}),
+            status=400,
+            mimetype='application/json'
+        )
+
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
-    
-    return model_to_dict(timeline_post)
+    post_dict = model_to_dict(timeline_post)
+    # Converting datetime to string, since it is not JSON serializable
+    post_dict['created_at'] = post_dict['created_at'].strftime('%Y-%m-%dT%H:%M:%S')
+    return Response(
+        json.dumps(post_dict),
+        status=200,
+        mimetype='application/json'
+    )
 
 @app.route('/api/timeline_post', methods=['GET'])
 def get_time_line_post():
-    return {
-        'timeline_posts' : [
-            model_to_dict(p) for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
-        ]
-    }
-    
-time_line_messages = get_time_line_post()['timeline_posts']
-
+    posts = [
+        model_to_dict(p) for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
+    ]
+    # Converting datetime to string, since it is not JSON serializable
+    for post in posts:
+        post['created_at'] = post['created_at'].strftime('%Y-%m-%dT%H:%M:%S')  # Convert datetime to string
+    return Response(
+        json.dumps({'timeline_posts': posts}),
+        status=200,
+        mimetype='application/json'
+    )
 @app.route('/timeline')
 def timeline():
-    time_line_messages = get_time_line_post()['timeline_posts']
+    # changing the timeline function to get the timeline posts from the database
+    response = get_time_line_post()
+    time_line_messages = json.loads(response.get_data(as_text=True))['timeline_posts']
     return render_template('timeline.html', title="Timeline", time_line_messages=time_line_messages)
+
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
+                         user=os.getenv("MYSQL_USER"),
+                         password=os.getenv("MYSQL_PASSWORD"),
+                         host=os.getenv("MYSQL_HOST"),
+                         port=3306
+                         )
+                         
