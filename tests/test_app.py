@@ -14,8 +14,8 @@ class AppTestCase(unittest.TestCase):
         # Clear existing timeline posts before each test
         self.clear_timeline_posts()
     
+    # This will clear timeline posts in the test database
     def clear_timeline_posts(self):
-        # This will clear timeline posts in the test database
         from app import TimelinePost
         TimelinePost.delete().execute()
     
@@ -24,7 +24,6 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
         assert "<title>MLH Fellow</title>" in html
-
         # TODO: Add more tests related to the home page
         assert '<a class="nav-item nav-link active" href="/">About Me' in html
         assert '<a class="nav-item nav-link" href="/work"> Work and Education </a>' in html
@@ -47,10 +46,11 @@ class AppTestCase(unittest.TestCase):
         })
         assert response.status_code == 200
         assert response.is_json
-        json_data = response.get_json()
-        assert json_data["name"] == "Jane Doe"
-        assert json_data["email"] == "jane@example.com"
-        assert json_data["content"] == "Hello World, I'm Jane!"
+        json = response.get_json()
+        assert json["name"] == "Jane Doe"
+        assert json["email"] == "jane@example.com"
+        assert json["content"] == "Hello World, I'm Jane!"
+        # TODO: Add more tests relating to the timeline page
 
     def test_timeline_page(self):
         response = self.client.get('/timeline')
@@ -73,4 +73,3 @@ class AppTestCase(unittest.TestCase):
         assert response.status_code == 400
         html = response.get_data(as_text=True)
         assert "Invalid email" in html
-

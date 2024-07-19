@@ -34,17 +34,17 @@ class TestTimelinePost(unittest.TestCase):
         
         # TODO: Get the timeline posts and assert that they are in the correct order
         timeline_posts = TimelinePost.select().order_by(TimelinePost.created_at.asc())
-        self.assertEqual(timeline_posts.count(), 2)
+        assert timeline_posts.count() == 2
 
         first_retrieved = timeline_posts[0]
         second_retrieved = timeline_posts[1]
 
-        self.assertEqual(first_retrieved.id, 1)
-        self.assertEqual(first_retrieved.name, "John Doe")
-        self.assertEqual(first_retrieved.email, "john@example.com")
-        self.assertEqual(first_retrieved.content, "Hello World! I'm John Doe.")
+        assert first_retrieved.id == 1
+        assert first_retrieved.name == "John Doe"
+        assert first_retrieved.email == "john@example.com"
+        assert first_retrieved.content == "Hello World! I'm John Doe."
 
-        self.assertEqual(second_retrieved.id, 2)
-        self.assertEqual(second_retrieved.name, "Jane Doe")
-        self.assertEqual(second_retrieved.email, "jane@example.com")
-        self.assertEqual(second_retrieved.content, "Hello World! I'm Jane Doe.")
+        assert second_retrieved.id == 2
+        assert second_retrieved.name == "Jane Doe"
+        assert second_retrieved.email == "jane@example.com"
+        assert second_retrieved.content == "Hello World! I'm Jane Doe."

@@ -101,6 +101,7 @@ def post_time_line_post():
     email = request.form.get('email')
     content = request.form.get('content')
 
+    # Validating the name, email and content
     if not name:
         return Response(
             json.dumps({"error": "Invalid name"}),
@@ -122,6 +123,7 @@ def post_time_line_post():
 
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
     post_dict = model_to_dict(timeline_post)
+    # Converting datetime to string, since it is not JSON serializable
     post_dict['created_at'] = post_dict['created_at'].strftime('%Y-%m-%dT%H:%M:%S')
     return Response(
         json.dumps(post_dict),
@@ -134,6 +136,7 @@ def get_time_line_post():
     posts = [
         model_to_dict(p) for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
     ]
+    # Converting datetime to string, since it is not JSON serializable
     for post in posts:
         post['created_at'] = post['created_at'].strftime('%Y-%m-%dT%H:%M:%S')  # Convert datetime to string
     return Response(
@@ -143,6 +146,7 @@ def get_time_line_post():
     )
 @app.route('/timeline')
 def timeline():
+    # changing the timeline function to get the timeline posts from the database
     response = get_time_line_post()
     time_line_messages = json.loads(response.get_data(as_text=True))['timeline_posts']
     return render_template('timeline.html', title="Timeline", time_line_messages=time_line_messages)
