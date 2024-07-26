@@ -9,14 +9,20 @@ from playhouse.shortcuts import model_to_dict
 load_dotenv() # makes .env credentials available
 app = Flask(__name__)
 
-mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
-              user=os.getenv("MYSQL_USER"),
-              password=os.getenv("MYSQL_PASSWORD"),
-              host=os.getenv("MYSQL_HOST"),
-              port=3306
-)
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    print("Running in prod mode")
+    mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
+                         user=os.getenv("MYSQL_USER"),
+                         password=os.getenv("MYSQL_PASSWORD"),
+                         host=os.getenv("MYSQL_HOST"),
+                         port=3306
+                         )
 
 print(mydb)
+print(os.getenv("MYSQL_HOST"))
 
 class TimelinePost(Model):
     name = CharField()
@@ -151,14 +157,3 @@ def timeline():
     time_line_messages = json.loads(response.get_data(as_text=True))['timeline_posts']
     return render_template('timeline.html', title="Timeline", time_line_messages=time_line_messages)
 
-if os.getenv("TESTING") == "true":
-    print("Running in test mode")
-    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
-else:
-    mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
-                         user=os.getenv("MYSQL_USER"),
-                         password=os.getenv("MYSQL_PASSWORD"),
-                         host=os.getenv("MYSQL_HOST"),
-                         port=3306
-                         )
-                         
