@@ -28,5 +28,10 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_IP: ${{ secrets.SSH_IP }}
 
+      - name: Check Permissions
+        run: | 
+          chmod 700 ~/.ssh
+          ls -lra ~/.ssh 
+
       - name: Print project root directory
         run: ssh -vvv my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
