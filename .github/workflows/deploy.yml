@@ -31,3 +31,6 @@ jobs:
 
       - name: Print project root directory
         run: ssh my-vps '~/redeploy-site.sh'
+
+      - name: Send Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀Deploy Successful"
