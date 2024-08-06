@@ -33,6 +33,7 @@ jobs:
           chmod 700 ~/.ssh
           ls -lra ~/.ssh 
           echo $SSH_USER
+          echo "Hello"
           echo $SSH_IP
 
       - name: Print project root directory
