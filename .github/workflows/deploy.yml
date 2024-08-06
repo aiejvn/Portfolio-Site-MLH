@@ -23,18 +23,11 @@ jobs:
             IdentityFile ~/.ssh/deploy-key.pem
             StrictHostKeyChecking no
           END
+          cat ~/.ssh/config
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_IP: ${{ secrets.SSH_IP }}
 
-      - name: Check Permissions
-        run: | 
-          chmod 700 ~/.ssh
-          ls -lra ~/.ssh 
-          echo $SSH_USER
-          echo "Hello"
-          echo $SSH_IP
-
       - name: Print project root directory
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
+        run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
