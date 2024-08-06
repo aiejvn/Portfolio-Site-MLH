@@ -32,6 +32,8 @@ jobs:
         run: | 
           chmod 700 ~/.ssh
           ls -lra ~/.ssh 
+          echo $SSH_USER
+          echo $SSH_IP
 
       - name: Print project root directory
-        run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
+        run: ssh $SSH_USER@$SSH_IP 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
