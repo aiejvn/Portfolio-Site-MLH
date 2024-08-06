@@ -32,7 +32,6 @@ jobs:
         run: | 
           chmod 700 ~/.ssh
           ls -lra ~/.ssh 
-          cat ~/.ssh/deploy-key.pem
 
       - name: Print project root directory
         run: ssh -vvv my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
