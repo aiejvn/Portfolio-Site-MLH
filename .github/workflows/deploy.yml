@@ -38,7 +38,6 @@ jobs:
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
       
       - name: "Failure Handling"
-        if: ${{ failure() || github.event.workflow_run.conclusion == 'failure' }}
+        if: ${{ failure() }}
         run: |  
           curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
-          echo ${{ github.event.workflow_run.conclusion }}
