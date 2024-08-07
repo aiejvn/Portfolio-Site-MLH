@@ -39,16 +39,11 @@ jobs:
 
       
   failure_job:
-    name: "Deployment Failure Handling"
+    name: "Failure Handling"
     runs-on: ubuntu-latest
-    if: failure() 
     steps:
       - name: Send Discord Failure Message
+        if: failure() || ${{ github.event.workflow_run.conclusion == 'failure' }}
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
 
-    name: "Test Failure Handling"
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - name: Send Discord Failure Message
-        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
+    
