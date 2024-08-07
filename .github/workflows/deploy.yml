@@ -31,22 +31,24 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_IP: ${{ secrets.SSH_IP }}
 
-      - name: Redeploy project
-        run: ssh my-vps '~/redeploy-site.sh'
-
       - name: Gross Error
         run: There's no way this is a command 
+
+      - name: Redeploy project
+        run: ssh my-vps '~/redeploy-site.sh'
 
       - name: Send Discord Message
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
 
-
-  failure_job:
-    name: "Failure Handling"
-    runs-on: ubuntu-latest
-    if: failure()
-    steps:
       - name: Send Discord Failure Message
+        if: failure()
         run: | 
           curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
           echo ${{ github.event.workflow_run.conclusion }}
+
+  # failure_job:
+  #   name: "Failure Handling"
+  #   runs-on: ubuntu-latest
+  #   if: failure()
+  #   steps:
+      
