@@ -48,6 +48,9 @@ jobs:
         run: 
           echo "Failure detected?"
 
+        if: ${{ success() }}
+        run: 
+          echo "Success detected?"
       
   # failure_job:
   #   name: "Failure Handling"
