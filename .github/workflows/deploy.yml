@@ -42,7 +42,11 @@ jobs:
         run: |  
           curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
           echo ${{ github.event.workflow_run.conclusion }}
-          echo ${{ failure() }}
+
+      - name: "Check faulure"
+        if: ${{ failure() }}
+        run: 
+          echo "Failure detected?"
 
       
   # failure_job:
