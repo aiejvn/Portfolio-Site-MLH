@@ -37,27 +37,27 @@ jobs:
       - name: Send Discord Message
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
       
-      # - name: "Failure Handling"
-      #   if: ${{ failure() }} || ${{ github.event.workflow_run.conclusion == 'failure' }}
-      #   run: |  
-      #     curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
-      #     echo ${{ github.event.workflow_run.conclusion }}
-
-      - name: "Check failure"
-        if: failure()
-        run: 
-          echo "Failure detected?"
-
-      - name: "Check Tests"
-        if: ${{ github.event.workflow_run.conclusion == 'failure' }} 
-        run: 
-          echo "Test failure detected?"
-          echo ${{ github.event.workflow_run }}
-      
-      - name: "Check Both"
+      - name: "Failure Handling"
         if: ${{ failure() || github.event.workflow_run.conclusion == 'failure' }}
-        run:
-          echo "Both conditions tested - at least one found"
+        run: |  
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
+          echo ${{ github.event.workflow_run.conclusion }}
+
+      # - name: "Check failure"
+      #   if: failure()
+      #   run: 
+      #     echo "Failure detected?"
+
+      # - name: "Check Tests"
+      #   if: ${{ github.event.workflow_run.conclusion == 'failure' }} 
+      #   run: 
+      #     echo "Test failure detected?"
+      #     echo ${{ github.event.workflow_run }}
+      
+      # - name: "Check Both"
+      #   if: ${{ failure() || github.event.workflow_run.conclusion == 'failure' }}
+      #   run:
+      #     echo "Both conditions tested - at least one found"
   # failure_job:
   #   name: "Failure Handling"
   #   runs-on: ubuntu-latest
