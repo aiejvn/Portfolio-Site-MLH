@@ -55,7 +55,7 @@ jobs:
           echo ${{ github.event.workflow_run }}
       
       - name: "Check Both"
-        if: failure() || ${{ github.event.workflow_run.conclusion == 'failure' }}
+        if: ${{ failure() || github.event.workflow_run.conclusion == 'failure' }}
         run:
           echo "Both conditions tested - at least one found"
   # failure_job:
