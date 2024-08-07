@@ -38,7 +38,9 @@ jobs:
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
 
   failure_job:
-    if: failure()
+    name: "Failure Handling"
+    runs-on: ubuntu-latest
+    if: failure() || ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Send Discord Failure Message
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
