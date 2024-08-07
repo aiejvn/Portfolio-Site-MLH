@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Gross error
-        run: There's no way this is a command
-
       - name: Configure SSH
         run: | 
           mkdir -p ~/.ssh/
