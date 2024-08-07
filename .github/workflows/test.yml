@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Gross Error
+        run: There's no way this is a command 
       
       - name: Setup Python
         uses: actions/setup-python@v4
