@@ -34,13 +34,19 @@ jobs:
       - name: Redeploy project
         run: ssh my-vps '~/redeploy-site.sh'
 
+      - name: Gross Error
+        run: There's no way this is a command 
+
       - name: Send Discord Message
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
+
 
   failure_job:
     name: "Failure Handling"
     runs-on: ubuntu-latest
-    if: failure() || ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: failure()
     steps:
       - name: Send Discord Failure Message
-        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
+        run: | 
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=⏰ Deployment Failed"
+          echo ${{ github.event.workflow_run.conclusion }}
